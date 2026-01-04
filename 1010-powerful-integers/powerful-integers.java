@@ -1,29 +1,47 @@
 class Solution {
     public List<Integer> powerfulIntegers(int x, int y, int bound) {
-        Set<Integer> set = new HashSet<>();
+        int exp = 0;
+        Set<Integer> possiblePowersOfX = new HashSet<>();
+        Set<Integer> possiblePowersOfY = new HashSet<>();
 
-        int i = 0;
-
-        while (true) {
-            int xPow = (int) Math.pow(x, i);
-            if (xPow > bound) break;
-
-            int j = 0; 
-
-            while (true) {
-                int yPow = (int) Math.pow(y, j);
-                if (xPow + yPow > bound) break;
-
-                set.add(xPow + yPow);
-
-                
-                if (y == 1) break;
-                j++;
+        while(true){
+            if(x==1) {
+                possiblePowersOfX.add(1);
+                break;
             }
-            if (x == 1) break;
-            i++;
+            int pow = (int) Math.pow(x,exp);
+            if(pow <= bound){
+                possiblePowersOfX.add(pow);
+                exp++;
+            } 
+            else{
+                break;
+            }
+        }
+        exp = 0;
+        while(true){
+            if(y==1) {
+                possiblePowersOfY.add(1);
+                break;
+            }
+            int pow = (int) Math.pow(y,exp);
+            if(pow <= bound){
+                possiblePowersOfY.add(pow);
+                exp++;
+            } 
+            else{
+                break;
+            }
         }
 
-        return new ArrayList<>(set);
+        Set<Integer> answer = new HashSet<>();
+        for(int a : possiblePowersOfX){
+            for(int b : possiblePowersOfY){
+                if(a+b <= bound){
+                    answer.add(a+b);
+                }
+            }
+        }
+        return new ArrayList<>(answer);
     }
 }
