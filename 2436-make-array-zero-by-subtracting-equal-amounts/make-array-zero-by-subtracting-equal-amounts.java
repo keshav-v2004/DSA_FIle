@@ -21,16 +21,15 @@ class Solution {
     }
 
     public int findSmallest(int[] nums){
-        int answer = -1;
-        Arrays.sort(nums);
 
+        int smallest = Integer.MAX_VALUE;
         for(int elem : nums){
             if(elem > 0){
-                answer = elem;
-                break;
+                smallest = Math.min(smallest , elem);
             }
         }
-        return answer;
+        if(smallest != Integer.MAX_VALUE) return smallest;
+        return -1;
 
     }
 }
