@@ -1,29 +1,25 @@
 class Solution {
     public int rob(int[] nums) {
         int n = nums.length-1;
-
-        if(n+1 ==1) return nums[0];
-
-        if(n+1 == 2) return Math.max(nums[0] , nums[1]);
-
         int[] dp = new int[n+1];
-
-
-        return helper(nums ,  dp);
+        Arrays.fill(dp ,-1);
+        return helper(nums , n , dp);
     }
 
-    public int helper(int[] nums , int[] dp){
+    public int helper(int[] nums , int index , int[] dp){
 
-        dp[0] = nums[0];
-        dp[1] = Math.max(nums[0] , nums[1]);
-
-        for(int i = 2 ; i < nums.length ; i++){
-            int rob = nums[i] + dp[i-2];
-            int skip = dp[i-1];
-
-            dp[i] = Math.max(rob , skip);
+        if(index < 0){
+            return 0;
         }
-        return dp[nums.length-1];
 
+        if(dp[index] != -1) return dp[index];
+
+        // rob this house
+        int rob = nums[index] + helper(nums , index-2 ,dp);
+        
+        // skip this house
+        int skip = helper(nums , index-1 , dp);
+
+        return dp[index] = Math.max(rob , skip);
     }
 }
