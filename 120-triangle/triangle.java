@@ -1,29 +1,22 @@
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
         int m = triangle.size();
-        int n = triangle.get(triangle.size()-1).size();
+        int n = triangle.get(m - 1).size();
 
-        Integer[][] dp = new Integer[m][n];
+        int[][] dp = new int[m][n];
 
-        return helper(triangle , 0 , 0 , dp);
-    }
-
-    public int helper(List<List<Integer>> triangle , int i , int j , Integer[][] dp){
-
-        if (i == triangle.size() - 1) {
-            return triangle.get(i).get(j);
+        for (int j = 0; j < triangle.get(m - 1).size(); j++) {
+            dp[m - 1][j] = triangle.get(m - 1).get(j);
         }
 
-        if(dp[i][j] != null) return dp[i][j];
+        for (int i = m - 2; i >= 0; i--) {
+            for (int j = 0; j < triangle.get(i).size(); j++) {
+                dp[i][j] = triangle.get(i).get(j)
+                        + Math.min(dp[i + 1][j], dp[i + 1][j + 1]);
+            }
+        }
 
-        int bottom = helper(triangle ,i+1 , j , dp);
-        int next = helper(triangle , i+1 , j+1 , dp);
 
-        return dp[i][j] = triangle.get(i).get(j) + Math.min(bottom , next);
-
+        return dp[0][0];
     }
 }
-
-
-
-
