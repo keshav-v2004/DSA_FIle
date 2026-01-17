@@ -5,11 +5,32 @@ class Solution {
 
         Integer[][] dp = new Integer[m][n];
 
-        int answer = Integer.MAX_VALUE;
-
         for(int j = 0 ; j < n ; j++){
-            answer = Math.min(answer , helper(matrix , 0 , j , dp));
+            dp[0][j] = matrix[0][j];
         }
+
+        for(int i = 1 ; i < m ; i++){
+            for(int j = 0 ; j < n ; j++){
+
+                if(j==0){
+                    dp[i][j] = matrix[i][j] + Math.min(dp[i-1][j] , dp[i-1][j+1]);
+                }
+                else if(j==n-1){
+                    dp[i][j] = matrix[i][j] + Math.min(dp[i-1][j] , dp[i-1][j-1]);
+                }
+                else{
+                    dp[i][j] =matrix[i][j] +  Math.min(dp[i-1][j] , Math.min(dp[i-1][j+1] ,dp[i-1][j-1]));
+                }
+            }
+        }
+
+
+
+        int answer = Integer.MAX_VALUE;
+        for(int j = 0 ; j < n ; j++){
+            answer = Math.min(answer , dp[m-1][j]);
+        }
+
         return answer;
     }
 
