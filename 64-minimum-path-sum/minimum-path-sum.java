@@ -5,26 +5,22 @@ class Solution {
 
         int[][] dp = new int[m][n];
 
-        for(int i = 0 ; i < m ; i++){
-            Arrays.fill(dp[i] , -1);
+        dp[0][0] = grid[0][0];
+        for(int i = 1 ; i < m ; i++){
+            dp[i][0] = dp[i-1][0] + grid[i][0];
+        }
+        for(int j = 1 ; j < n ; j++){
+            dp[0][j] = dp[0][j-1] + grid[0][j];
         }
 
-        return helper(grid , 0 , 0 , dp);
+        for(int i = 1 ; i < m ; i++){
+            for(int j = 1 ; j < n ; j++){
+                dp[i][j] = grid[i][j] + Math.min(dp[i-1][j] , dp[i][j-1]);
+            }
+        }
+
+
+        return dp[m-1][n-1];
     }
 
-    public int helper(int[][] grid , int i , int j , int[][] dp){
-        if(i >= grid.length || j >= grid[0].length){
-            return Integer.MAX_VALUE;
-        }
-        if(i==grid.length-1 && j == grid[0].length-1){
-            return grid[i][j];
-        }
-
-        if(dp[i][j] != -1) return dp[i][j];
-
-        int down = helper(grid , i+1 , j , dp);
-        int right = helper(grid , i , j+1 , dp);
-
-        return dp[i][j] = grid[i][j] + Math.min(down , right);
-    }
 }
