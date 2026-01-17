@@ -3,7 +3,7 @@ class Solution {
         int m = matrix.length;
         int n = matrix[0].length;
 
-        Integer[][] dp = new Integer[m][n];
+        int[][] dp = new int[m][n];
 
         for(int j = 0 ; j < n ; j++){
             dp[0][j] = matrix[0][j];
@@ -32,26 +32,5 @@ class Solution {
         }
 
         return answer;
-    }
-
-    public int helper(int[][] grid ,int i , int j , Integer[][] dp){
-
-        if(j < 0 || j >= grid[0].length){
-            return Integer.MAX_VALUE;
-        }
-
-        if(i==grid.length-1){
-            return grid[i][j];
-        }
-
-        if(dp[i][j] != null) return dp[i][j];
-
-        int left = helper(grid , i+1 , j-1 ,dp);
-        int bottom = helper(grid , i+1 , j , dp);
-        int right = helper(grid , i+1 , j+1 , dp);
-
-        return dp[i][j] = grid[i][j] + Math.min(left , Math.min(right , bottom));
-
-
     }
 }
