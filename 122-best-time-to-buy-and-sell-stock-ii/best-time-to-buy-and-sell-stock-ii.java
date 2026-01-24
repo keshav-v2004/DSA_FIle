@@ -1,46 +1,44 @@
 class Solution {
 
-    Integer[][] memo;
-
     public int maxProfit(int[] prices) {
-        memo = new Integer[prices.length][2];
-        return helper(prices, 0, true);
-    }
 
-    public int helper(int[] prices, int index, boolean canBuy) {
+        int n = prices.length;
+        int[][] dp = new int[n + 1][2];
 
-        if (index >= prices.length) return 0;
+        dp[n][0] = 0;
+        dp[n][1] = 0;
 
-        int flag = canBuy ? 1 : 0;
-        if (memo[index][flag] != null)
-            return memo[index][flag];
 
-        int cost = prices[index];
-        int maxProfit = 0;
+        for (int index = n - 1; index >= 0; index--) {
+            int price = prices[index];
 
-        // allowed to buy
-        if (canBuy) {
+            // buy = 1  -> canBuy = true
+            // buy = 0  -> canBuy = false (holding stock)
 
-            // skip
-            int p1 = helper(prices, index + 1, true);
+            // Case 1: canBuy = true  (buy = 1)
+            {
+                // skip
+                int p1 = dp[index + 1][1];
 
-            // buy
-            int p2 = helper(prices, index + 1, false) - cost;
+                // buy
+                int p2 = dp[index + 1][0] - price ;
 
-            maxProfit = Math.max(p1, p2);
+                dp[index][1] = Math.max(p1, p2);
+            }
+
+            // Case 2: canBuy = false (buy = 0)
+            {
+                // skip
+                int p1 = dp[index + 1][0];
+
+                // sell
+                int p2 = price + dp[index + 1][1];
+
+                dp[index][0] = Math.max(p1, p2);
+            }
         }
-        // must sell or skip
-        else {
 
-            // skip
-            int p1 = helper(prices, index + 1, false);
-
-            // sell  ADD cost here
-            int p2 = helper(prices, index + 1, true) + cost;
-
-            maxProfit = Math.max(p1, p2);
-        }
-
-        return memo[index][flag] = maxProfit;
+        // Start at day 0, free to buy
+        return dp[0][1];
     }
 }
