@@ -1,25 +1,31 @@
 class Solution {
     public char findKthBit(int n, int k) {
+
+        String[] dp = new String[n+1];
+
         
-        String str = helper(n);
+        String str = helper(n , dp);
 
         return str.charAt(k-1);
-        
+
     }
 
-    public String helper(int n ){
+    public String helper(int n , String[] dp){
 
         if(n==1){
             return "0";
         }
-        String prev = helper(n-1);
+
+        if(dp[n] != null) return dp[n];
+
+        String prev = helper(n-1 , dp);
 
         String inverted = invert(prev);
         String reversed = new StringBuilder(inverted).reverse().toString();
 
         String current = prev + "1" + reversed;
 
-        return current;
+        return dp[n] = current;
 
     }
 
