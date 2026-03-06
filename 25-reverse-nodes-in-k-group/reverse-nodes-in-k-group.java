@@ -10,64 +10,69 @@
  */
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
-
+        
         ListNode temp = head;
-        ListNode prevGroupTail = null;
+        ListNode grpPrev = null;
 
-        while (temp != null) {
+        while(temp != null){
 
-            ListNode node = getNode(temp, k);
 
-            if (node == null) break;   // less than k nodes left
+            ListNode node = getNode(temp , k);
 
-            ListNode groupNext = node.next;
-            node.next = null;          // isolate the group
+            // means less than k nodes available --> should remain as it is
+            if(node == null) break;
+            
+            ListNode grpNext = node.next;
 
-            ListNode newHead = reverseList(temp);
+            node.next = null;
 
-            if (prevGroupTail == null) {
-                head = newHead;        // first group becomes new head
-            } else {
-                prevGroupTail.next = newHead;
+            ListNode newNode = reverse(temp);
+
+            // for the first group
+            if(grpPrev == null){
+                head = newNode;
+
+                grpPrev = temp;
+                temp.next = grpNext;
+                temp = temp.next;
             }
 
-            prevGroupTail = temp;      // temp becomes tail after reverse
-            temp = groupNext;          // move to next group
-        }
+            // not the first group
+            else{
+                grpPrev.next = newNode;
+                grpPrev = temp;
+                temp.next = grpNext;
 
-        if (prevGroupTail != null) {
-            prevGroupTail.next = temp; // attach remaining nodes
+                temp = temp.next;
+            }
         }
-
         return head;
+
     }
 
-    public ListNode reverseList(ListNode head) {
-
-        if(head==null || head.next==null) return head;
-        ListNode temp = null;
+    public ListNode reverse(ListNode head){
 
         ListNode mover = head;
-        
-        while(mover.next != null){
 
+        ListNode prev = null;
+
+        while(mover != null){
             ListNode next = mover.next;
-
-            mover.next = temp;
-            temp = mover;
+            mover.next = prev;
+            prev = mover;
             mover = next;
         }
-        mover.next = temp;
 
-        return mover;
+        // return the new head
+        return prev;
+
     }
+    public ListNode getNode(ListNode mover , int k){
 
-    public ListNode getNode(ListNode mover, int k) {
-        while (mover != null && k > 1) {
+        while(mover != null && k > 1){
             mover = mover.next;
             k--;
         }
         return mover;
-
     }
 }
