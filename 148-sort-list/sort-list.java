@@ -10,34 +10,83 @@
  */
 class Solution {
     public ListNode sortList(ListNode head) {
-
+        
         if(head==null || head.next == null) return head;
-        return helper(head);
+        return mergeSort(head);
+
     }
 
-    public ListNode helper(ListNode mover){
-        if(mover.next ==null){
-            return mover;
+    public ListNode mergeSort(ListNode head){
+        if(head==null || head.next == null) return head;
+
+        ListNode middle = findMiddle(head);
+        ListNode rightHead = middle.next;
+        middle.next = null;
+
+        ListNode leftHead = mergeSort(head);
+        rightHead = mergeSort(rightHead);
+
+        ListNode finalHead = merge(leftHead , rightHead);
+        
+        return finalHead;
+    }
+
+    public ListNode findMiddle(ListNode head){
+        ListNode slow = head;
+        ListNode fast = head.next;
+        
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
         }
+        return slow;
+    }
 
-        ListNode newHead = helper(mover.next);
-        ListNode prev = null;
-        ListNode ptr = newHead;
+    public ListNode merge(ListNode head1 , ListNode head2){
 
-        while(ptr != null && mover.val >= ptr.val ){
-            prev = ptr;
-            ptr = ptr.next;
-        }
+        ListNode ptr1 = head1;
+        ListNode ptr2 = head2;
 
-        if(prev==null){
-            mover.next = newHead;
-            newHead = mover;
+        ListNode head = null;
+
+        if(ptr1.val < ptr2.val){
+            head = new ListNode(ptr1.val);
+            ptr1 = ptr1.next;
+
         }
         else{
-            prev.next = mover;
-            prev = prev.next;
-            prev.next = ptr;
+            head = new ListNode(ptr2.val);
+            ptr2 = ptr2.next;
         }
-        return newHead;
+        ListNode mover = head;
+
+        while(ptr1 != null && ptr2 != null){
+            if(ptr1.val < ptr2.val){
+                mover.next = ptr1;
+                ptr1 = ptr1.next;
+            }
+            else{
+                mover.next= ptr2;
+                ptr2 = ptr2.next;
+            }
+            mover = mover.next;
+        }
+
+        while(ptr1 != null){
+            mover.next = ptr1;
+            mover = mover.next;
+            ptr1 = ptr1.next;
+
+        }
+        
+        while(ptr2 != null){
+            mover.next = ptr2;
+            mover = mover.next;
+            ptr2 = ptr2.next;
+            
+        }
+
+        return head;
+
     }
 }
