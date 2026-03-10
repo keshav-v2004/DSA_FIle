@@ -1,59 +1,51 @@
 class Solution {
     public boolean isBipartite(int[][] graph) {
+
         int n = graph.length;
 
-
         int[] visited = new int[n];
-        Arrays.fill(visited , -1);
+        Arrays.fill(visited, -1);
 
-        for(int i = 0 ; i < n ; i++){
-            if(visited[i] == -1){
-                if(bfs(i,graph , visited) == false){
+        for (int i = 0; i < n; i++) {
+            if (visited[i] == -1) {
+                visited[i] = 0;
+                if (dfs(i, 0, graph, visited) == false) {
                     return false;
                 }
             }
+
         }
         return true;
-
-
     }
 
-    public boolean bfs(int i , int[][] adj , int[] visited){
-        
-        Queue<Integer> q = new LinkedList<>();
-        visited[i] = 0;
-        q.offer(i);
+    public boolean dfs(int i, int colorUsed, int[][] graph, int[] visited) {
 
-        while(!q.isEmpty()){
+        int[] neighbours = graph[i];
 
-            int curNode = q.poll();
-            int curColor = visited[curNode];
+        for (int elem : neighbours) {
 
-            int[] neighbours = adj[curNode];
+            if (visited[elem] == -1) {
 
-            for(int elem : neighbours){
-
-                if(visited[elem] == -1){
-                    
-                    q.offer(elem);
-
-                    if(curColor==0){
-                        visited[elem] = 1;
-                    }
-                    else{
-                        visited[elem] = 0;
-                    }
-                }
-                else{
-                    if(curColor==visited[elem]){
+                if (colorUsed == 0) {
+                    visited[elem] = 1;
+                    if (dfs(elem, 1, graph, visited)==false) {
                         return false;
                     }
                 }
 
+                else {
+                    visited[elem] = 0;
+                    if (dfs(elem, 0, graph, visited)==false) {
+                        return false;
+                    }
+                }
+            } else {
+                if (visited[elem] == colorUsed) {
+                    return false;
+                }
             }
-        }
-        
-        return true;
 
+        }
+        return true;
     }
 }
