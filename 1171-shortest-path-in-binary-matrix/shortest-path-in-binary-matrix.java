@@ -10,51 +10,43 @@ class Solution {
         Queue<int[]> q = new LinkedList<>();
 
         int[][] visited = new int[m][n];
+
+        for(int[] each : visited){
+            Arrays.fill(each , Integer.MAX_VALUE);
+        }
+
         visited[0][0] = 1;
 
-        int distance = 1;
+        q.offer(new int[]{0,0});
 
-        q.offer(new int[] { 0, 0 });
+        while(!q.isEmpty()){
+            
+            int[] cur = q.poll();
 
-        while (!q.isEmpty()) {
+            int curR = cur[0];
+            int curCol = cur[1];
 
-            int size = q.size();
+            for(int i = -1 ; i<= 1 ; i++){
+                for(int j = -1 ; j <= 1 ; j++){
 
-            for (int i = 0; i < size; i++) {
+                    if(i==0 && j == 0) continue;
 
-                int[] cur = q.poll();
+                    int newR = curR + i;
+                    int newCol = curCol +j;
 
-                int curR = cur[0];
-                int curC = cur[1];
-
-                if (curR == m - 1 && curC == n - 1) {
-                    return distance;
-                }
-
-                for(int dx = -1 ; dx <= 1 ; dx++){
-
-                    for(int dy = -1 ; dy <= 1 ; dy++){
-
-                        if(dx==0 && dy==0) continue;
-
-                        int newR = curR + dx;
-                        int newCol = curC + dy;
-
-                        if(newR >= 0 && newCol >= 0 && newR < m && newCol < n && grid[newR][newCol] == 0 && visited[newR][newCol] == 0){
+                    if(newR >= 0 && newCol >= 0 && newR < m && newCol < n && grid[newR][newCol] == 0){
+                        if(visited[newR][newCol] > visited[curR][curCol] + 1){
+                            visited[newR][newCol] = visited[curR][curCol] + 1;
 
                             q.offer(new int[]{newR , newCol});
-                            visited[newR][newCol] = 1;
                         }
                     }
                 }
-
-
-
             }
-            distance++;
-
         }
 
-        return -1;
+        if(visited[m-1][n-1] == Integer.MAX_VALUE) return -1;
+
+        return visited[m-1][n-1];
     }
 }
