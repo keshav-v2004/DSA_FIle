@@ -1,26 +1,36 @@
 class Solution {
+
     public int makeConnected(int n, int[][] connections) {
 
-        if( connections.length < n-1 ) return -1;
-
         DisjointSet ds = new DisjointSet(n);
+
+        int countExtra = 0;
 
         for(int[] edge : connections){
             int u = edge[0];
             int v = edge[1];
 
-            ds.unionByRank(u,v);
-        
-        }
-
-        int count = 0;
-
-        for(int i = 0 ; i < n ; i++){
-            if(ds.findParent(i) == i){
-                count++;
+            if(ds.findParent(u) == ds.findParent(v)){
+                countExtra++;
+            }
+            else{
+                ds.unionByRank(u,v);
             }
         }
-        return count-1;
+
+        int ultimateParent = 0;
+        for(int i = 0 ; i < n ; i++){
+            if(ds.findParent(i) == i){
+                ultimateParent++;
+            }
+        }
+
+        int edgesRequired = ultimateParent-1;
+        if(countExtra >= edgesRequired){
+            return edgesRequired;
+        }
+
+        return -1;
 
 
     }
