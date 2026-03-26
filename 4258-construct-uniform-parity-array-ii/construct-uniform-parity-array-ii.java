@@ -1,12 +1,12 @@
 class Solution {
     public boolean uniformArray(int[] nums1) {
 
-        Set<Integer> set = new HashSet<>();
+        
         int minOdd= Integer.MAX_VALUE;
         int minEven = Integer.MAX_VALUE;
 
         for (int elem : nums1) {
-            set.add(elem);
+            
 
             if(elem % 2 != 0){
                 minOdd = Math.min(minOdd , elem);
