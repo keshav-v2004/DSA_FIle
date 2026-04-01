@@ -20,11 +20,13 @@ class Solution {
         
         while(r < n){
 
+            l++;
+
             // remove out of window elements
-            while( !adq.isEmpty() && adq.peekFirst() <= r-k){
+            while( !adq.isEmpty() && adq.peekFirst() < l){
                 adq.pollFirst();
             }
-            
+
             // Maintain monotonic deque
             while(!adq.isEmpty() && nums[adq.peekLast()] <= nums[r]){
                 adq.pollLast();
@@ -34,7 +36,7 @@ class Solution {
 
             answer.add(nums[adq.peekFirst()]);
             r++;
-            l++;
+
 
         }
 
