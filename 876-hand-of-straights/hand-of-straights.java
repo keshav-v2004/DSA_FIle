@@ -49,7 +49,7 @@ class Solution {
 
         }
 
-        return pq2.isEmpty();
+        return set.isEmpty();
 
     }
 }
