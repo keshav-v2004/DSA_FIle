@@ -1,62 +1,86 @@
 class Robot {
 
-    int x = 0, y = 0;
-    int w, h;
-    int dir = 1; // 0=N, 1=E, 2=S, 3=W
+    int x = 0;
+    int y = 0;
+
+    int m;
+    int n;
+
+    int dir = 1;
+
     int cycle;
 
+
+    // 0 1 2 3
+    // North East South West
+
     public Robot(int width, int height) {
-        w = width;
-        h = height;
-        cycle = 2 * (w + h) - 4;
+        m = width;
+        n = height;
+
+        cycle = 2*(m+n) - 4;
+
     }
     
     public void step(int num) {
-        num %= cycle;
 
-        if (num == 0) {
-            if (x == 0 && y == 0) dir = 2; 
-            return;
-        }
+        num = num % cycle;
 
-        while (num > 0) {
-
-            if (dir == 1) { // East
-                int move = Math.min(num, w - 1 - x);
-                x += move;
-                num -= move;
-                if (move == 0) dir = 0;
-            }
-
-            else if (dir == 0) { // North
-                int move = Math.min(num, h - 1 - y);
-                y += move;
-                num -= move;
-                if (move == 0) dir = 3;
-            }
-
-            else if (dir == 3) { // West
-                int move = Math.min(num, x);
-                x -= move;
-                num -= move;
-                if (move == 0) dir = 2;
-            }
-
-            else { // South
-                int move = Math.min(num, y);
-                y -= move;
-                num -= move;
-                if (move == 0) dir = 1;
+        if(num == 0){
+            if(x==0 && y ==0){
+                dir = 2;
+                return;
             }
         }
+
+        int i = 0;
+
+        while(i < num){
+            int newX = x;
+            int newY = y;
+
+            if(dir == 0) newY++;
+            else if(dir==1) newX++;
+            else if(dir==2) newY--;
+            else if(dir==3) newX--;
+
+            if(newX >= 0 && newX < m && newY >= 0 && newY < n){
+                x = newX;
+                y = newY;
+                i++;
+            }
+            else{
+                dir = (dir+3) % 4;
+            }
+        }
+        
+
     }
     
     public int[] getPos() {
-        return new int[]{x, y};
+        return new int[]{x,y};
     }
     
     public String getDir() {
-        String[] d = {"North", "East", "South", "West"};
-        return d[dir];
+        if(dir==0){
+            return "North";
+        }
+        else if(dir==1){
+            return "East";
+        }
+        else if(dir==2){
+            return "South";
+        }
+        else{
+            return "West";
+        }
     }
 }
+
+/**
+ * Your Robot object will be instantiated and called as such:
+ * Robot obj = new Robot(width, height);
+ * obj.step(num);
+ * int[] param_2 = obj.getPos();
+ * String param_3 = obj.getDir();
+ */
