@@ -12,6 +12,12 @@ class Solution {
 
             int reverseNumber = reverse(elem);
 
+            // if map already contains this element , this element becomes reverseNumber
+            // example --> map already contains 15 , now i am seeing it again
+            // so current occurence will become reverse Number
+
+            // so put current occurence as index of reverseNumber
+            
             if(map.containsKey(elem) ){
 
                 minDistance = Math.min(minDistance , i - map.get(elem));
